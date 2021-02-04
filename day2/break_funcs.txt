@@ -1,4 +1,0 @@
-layout src
-break valid_passwords
-break get_max_min
-break count_of_char_appeared_in_passwd
