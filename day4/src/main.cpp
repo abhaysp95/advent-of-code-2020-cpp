@@ -1,5 +1,9 @@
 // main file
 
+/** program could be written in a better way, though I have thought to make
+ * minimal changes to those part which were the part of the solution for part1
+ * */
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -53,9 +57,12 @@ void print(const std::map<std::string, std::string>& input_data) {
 
 bool check_if_passport_is_valid(const std::map<std::string, std::string>& input_data,
 		size_t& valid_passports_count) {
-	if (valid_passports(input_data)) {
-		valid_passports_count++;
-		return true;
+	if (if_all_required_fields_exist(input_data)) {
+		// if password is valid then check if it has all the valid values or not
+		if (if_all_values_are_correct(input_data)) {
+			valid_passports_count++;
+			return true;
+		}
 	}
 	return false;
 }
