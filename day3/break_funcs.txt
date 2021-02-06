@@ -1,3 +1,0 @@
-layout src
-break main
-break count_of_tree_encountered
