@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
 	while (getline(input_file, tree_row)) {
 		forest.push_back(tree_row);
 	}
+	input_file.close();
 	/** making a temp_forest is necessary, since in case 2 you have to use forest
 	  5 times, and it'll change the forest, so you have to fix it again and again */
 	vec_str temp_forest;
