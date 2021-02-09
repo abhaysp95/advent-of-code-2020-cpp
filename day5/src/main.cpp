@@ -8,7 +8,8 @@
 
 #include "../inc/day5_util.hpp"
 
-int main(int argc, char **argv) {
+/** part1 of the question */
+void part1() {
 	std::ifstream input_file;
 	input_file.open("./input_main.txt");
 	std::string pos_str;
@@ -26,5 +27,9 @@ int main(int argc, char **argv) {
 	std::vector<size_t>::const_iterator highest_seat_id = std::max_element(get_seat_ids.begin(), get_seat_ids.end());
 	std::cout << "\nhighest seat id: " << *highest_seat_id << std::endl;
 	input_file.close();
+}
+
+int main(int argc, char **argv) {
+	part1();
 	return 0;
 }
