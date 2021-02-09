@@ -48,15 +48,22 @@ size_t get_my_seat_id(std::vector<size_t>& seat_ids) {
 	return 0;
 }
 
+
+/** this function is not doing anything yet, an idea is to find the seat_id just
+  * like in the above function but return the path, for that we have to create path
+  * from the previous existing path + 1, which could be next seat or first seat in
+  * next row
+  */
+
 /** question says that my seat isn't in very first and very last, so I think,
   * we can skip first 8 seats and last eigth seats for checking
   */
-std::string get_my_seat_path(const std::map<std::string, size_t>& seats_info) {
+std::string get_my_seat_path(std::map<std::string, size_t>& seats_info) {
 	// sort the seats
-	//std::sort(seats_info.begin(), seats_info.end(),
-			//[=](const std::pair<const std::string, size_t>& first, const std::pair<const std::string, size_t>& second) {
-					//return first.second < second.second;
-				//});
+	std::sort(seats_info.begin(), seats_info.end(),
+			[=](std::pair<std::string, size_t> first, std::pair<std::string, size_t> second) {
+					return first.second < second.second;
+				});
 	std::map<std::string, size_t>::const_iterator
 		second_from_start{std::next(seats_info.begin(), 8)},
 		second_from_end{std::prev(seats_info.end(), 8)};
