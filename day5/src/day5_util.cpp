@@ -58,28 +58,56 @@ size_t get_my_seat_id(std::vector<size_t>& seat_ids) {
 /** question says that my seat isn't in very first and very last, so I think,
   * we can skip first 8 seats and last eigth seats for checking
   */
-std::string get_my_seat_path(std::map<std::string, size_t>& seats_info) {
-	// sort the seats
-	std::sort(seats_info.begin(), seats_info.end(),
-			[=](std::pair<std::string, size_t> first, std::pair<std::string, size_t> second) {
-					return first.second < second.second;
-				});
-	std::map<std::string, size_t>::const_iterator
-		second_from_start{std::next(seats_info.begin(), 8)},
-		second_from_end{std::prev(seats_info.end(), 8)};
-	// set counter from second seat
-	size_t seat_id_counter = second_from_start->second;
-	while (second_from_start != second_from_end) {
-		if (second_from_start->second != seat_id_counter) {
-			// check if +1 and -1 seats exist or not
-			if ((std::prev(second_from_start, 1)->second == seat_id_counter - 1) &&
-					(std::next(second_from_start, 1)->second == seat_id_counter + 1)) {
-				// this is my seat
-				return second_from_start->first;
+std::string get_my_seat_path(const std::map<std::string, size_t>& seats_info, size_t my_seat_id) {
+	/** use the get_my_seat_id() function to get the seat id, now as per
+	 * question one seat before and after my seat do exist
+	 */
+	std::string my_seat_path;
+	// get one previous seat path from your seat id
+	std::map<std::string, size_t>::const_iterator prev_seat_info = std::find_if(seats_info.begin(), seats_info.end(),
+			[my_seat_id](const std::pair<const std::string, size_t>& pair) {
+				return pair.second == my_seat_id - 1;
+			});
+	/* now get the the next seat path from the prev_seat_info. Now, my seat
+	 * could either be just next to prev seat or the first seat in next row
+	 */
+	my_seat_path = std::string(prev_seat_info->first.begin(), prev_seat_info->first.end());
+	std::string::const_reverse_iterator prev_seat_criter_begin = prev_seat_info->first.rbegin();
+	std::string::const_reverse_iterator prev_seat_criter_end = prev_seat_info->first.rend();
+	std::string::reverse_iterator my_seat_riter_begin = my_seat_path.rbegin();
+	size_t r_count{};  /** if all three columns are R then my seat is first in next row */
+	while (prev_seat_criter_begin != prev_seat_criter_end) {
+		if (*prev_seat_criter_begin == 'R') {
+			*my_seat_riter_begin = 'L';
+			r_count++;
+		}
+		else if (*prev_seat_criter_begin == 'L') {
+			*my_seat_riter_begin = 'R';
+			// cause if you'll get R then there's space just next to this seat
+			break;
+		}
+		else {
+			// now my seat is the first seat in the next row
+			if (r_count == 3) {
+				if (*prev_seat_criter_begin == 'B') {
+					*my_seat_riter_begin = 'F';
+				}
+				else if (*prev_seat_criter_begin == 'F') {
+					*my_seat_riter_begin = 'B';
+					break;
+				}
 			}
 		}
-		second_from_start = std::next(second_from_start, 1);
-		seat_id_counter++;
+		prev_seat_criter_begin++;
+		my_seat_riter_begin++;
+	}
+	/** now just to double check if id from my_seat_path is equal to +1 of prev_seat_id */
+	std::string::const_iterator my_seat_path_cbegin{my_seat_path.begin()}, my_seat_path_cend{my_seat_path.end()};
+	size_t get_row_pos = get_place(my_seat_path_cbegin, my_seat_path_cend, 0, 127, 'F', 'B');
+	size_t get_col_pos = get_place(my_seat_path_cbegin, my_seat_path_cend, 0, 7, 'L', 'R');
+	size_t temp_my_seat_id = get_row_pos * 8 + get_col_pos;
+	if (temp_my_seat_id == my_seat_id) {
+		return my_seat_path;
 	}
 	return nullptr;
 }
