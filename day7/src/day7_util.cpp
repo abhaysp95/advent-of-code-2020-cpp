@@ -5,6 +5,7 @@
 #include <set>
 #include <algorithm>
 #include <cctype>
+#include <stdexcept>
 
 size_t get_bag_counts(const std::vector<std::string>& all_bags_info, const std::string color_name) {
 	static std::set<std::string> bags_color;
@@ -82,4 +83,82 @@ std::string get_secondary_color_name(const std::string& bag_info) {
 		}
 	}
 	return secondary_color_name;
+}
+
+size_t get_bag_contain_count(const std::vector<std::string>& all_bags_info, const std::string color_name) {
+	static size_t bag_capacity{};
+	std::map<std::string, size_t> color_map;
+	std::vector<std::string>::const_iterator bags_info_cbegin{all_bags_info.cbegin()}, bags_info_cend{all_bags_info.cend()};
+	bool found_main_color = false;
+	do {
+		// find where we can find that color bag info
+		std::string::const_iterator get_main_color_pos_citer = get_color_position(*bags_info_cbegin, color_name);
+		if (get_main_color_pos_citer == bags_info_cbegin->begin()) {
+			// this is the color bag for which we should look what type of bags it can hold
+			found_main_color = true;
+			color_map = get_bag_details(*bags_info_cbegin);
+			if (!color_map.empty()) {
+				std::map<std::string, size_t>::const_iterator map_elements_cbegin{color_map.cbegin()},
+					map_elements_cend{color_map.end()};
+				do {
+					size_t count{map_elements_cbegin->second};
+					bag_capacity += count * get_bag_contain_count(all_bags_info, map_elements_cbegin->first);
+					map_elements_cbegin++;
+				} while (map_elements_cbegin != map_elements_cend);
+			}
+			bag_capacity += 1;  // check it later
+		}
+		if (found_main_color) { break; }
+		bags_info_cbegin++;
+	} while (bags_info_cbegin != bags_info_cend);
+	return bag_capacity;
+}
+
+std::map<std::string, size_t> get_bag_details(const std::string& bag_info) {
+	std::map<std::string, size_t> map_for_color_count;
+	std::vector<size_t> color_counts;
+	std::vector<std::string> color_names;
+	std::string color_name{};
+	bool number_found = false;
+	std::string::const_iterator first{bag_info.cbegin()}, second{}, bag_info_cend{bag_info.cend()};
+	do {
+		first = std::find_if(first, bag_info_cend, [=](const char& c){ return !isspace(c); });
+		second = std::find_if(first, bag_info_cend, [=](const char& c){ return !isspace(c); });
+		if (first != bag_info_cend) {
+			std::string temp_str{first, second};
+			if (number_found) {
+				// it means atleast one count is found, which means we should start
+				// checking for color names now
+				if ((temp_str == "bag,") ||
+						(temp_str == "bag.") ||
+						(temp_str == "bags,") ||
+						(temp_str == "bags.")) {
+					color_names.push_back(std::string(color_name.begin(), color_name.end() - 1));
+					color_name.clear();
+					number_found = false;
+				}
+				else {
+					color_name += temp_str + " ";
+				}
+				continue;
+			}
+			try {
+				if (isdigit(stoi(temp_str))) {
+					number_found = true;
+					color_counts.push_back(stoi(temp_str));
+				}
+			} catch (std::invalid_argument) {
+				// do nothing
+			}
+			first = second;
+		}
+	} while (first != bag_info_cend);
+	// they should be equal
+	if ((!color_counts.empty()) && (color_names.size() == color_counts.size())) {
+		std::vector<size_t>::size_type i{};
+		for (i = 0; i < color_counts.size(); ++i) {
+			map_for_color_count.insert(std::make_pair(color_names[i], color_counts[i]));
+		}
+	}
+	return map_for_color_count;
 }

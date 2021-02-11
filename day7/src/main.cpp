@@ -16,7 +16,15 @@ int main(int argc, char **argv) {
 		all_bags_info.push_back(bag_info);
 	}
 	input_file.close();
+
+	/************** first part *****************
 	size_t color_counts = get_bag_counts(all_bags_info, "shiny gold");
 	std::cout << "bag colors containing atleast one shiny gold bag: " << color_counts << std::endl;
+	*******************************************/
+
+	/************** second part ****************/
+	size_t number_of_bags_contained = get_bag_contain_count(all_bags_info, "shiny gold");
+	std::cout << "count of bags contained by my bag(shiny gold): " << number_of_bags_contained << std::endl;
+	/*******************************************/
 	return 0;
 }
