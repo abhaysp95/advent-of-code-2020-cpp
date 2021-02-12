@@ -7,6 +7,16 @@
 #include <cctype>
 #include <stdexcept>
 
+/** NOTE:
+ * Use map(hashmap) for this questions solution as it would optimize the
+ * program very much I haven't used it, cause I didn't thought of it at that
+ * time. You have to have a map, in which key will be the color mentioned at the
+ * begining of the line and value will be another map(say sub-map) which will
+ * contain the color-name and color count which main color contains, that way
+ * you don't have to do this much looping(which I have done) in program and no
+ * splitting several times
+*/
+
 size_t get_bag_counts(const std::vector<std::string>& all_bags_info, const std::string color_name) {
 	static std::set<std::string> bags_color;
 	std::vector<std::string>::const_iterator bags_info_cbegin{all_bags_info.cbegin()}, bags_info_cend{all_bags_info.cend()};
