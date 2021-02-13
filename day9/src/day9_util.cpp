@@ -2,7 +2,9 @@
 
 #include "../inc/day9_util.hpp"
 
-size_t first_defaulter_number(std::vector<size_t>& xmas_data, const size_t preamble_size) {
+#include <numeric>
+
+size_t first_defaulter_number(std::vector<size_t> xmas_data, const size_t preamble_size) {
 	size_t defaulter{};
 	std::vector<size_t>::const_iterator number_to_check_citer{xmas_data.cbegin() + preamble_size};
 	std::vector<size_t>::const_iterator data_begin{xmas_data.cbegin()}, data_end{xmas_data.cend()};
@@ -36,4 +38,53 @@ bool check_if_number_is_correct(const std::vector<size_t>& check_within_numbers,
 		}
 	}
 	return is_this_correct_number;
+}
+
+size_t get_encryption_weakness_number(const std::vector<size_t>& xmas_data) {
+	size_t defaulter = first_defaulter_number(xmas_data, 25);
+	std::cout << "defaulter is: " << defaulter << "\n";
+	size_t enc_weakness{};
+	std::vector<size_t>::size_type initial{2};
+	bool got_correct_list = false;
+	while (initial <= xmas_data.size()) {
+		std::vector<size_t>::const_iterator start_from{xmas_data.cbegin()}, end_to{xmas_data.cend()};
+		do {
+			std::vector<size_t> temp_list_to_check_weakness{start_from, start_from + initial};
+			got_correct_list = is_this_correct_list(temp_list_to_check_weakness, defaulter);
+			if (got_correct_list) {
+				enc_weakness += sum_max_min(temp_list_to_check_weakness);
+			}
+			start_from++;
+		} while (start_from + (initial - 1) != end_to);
+		initial++;
+	}
+	return enc_weakness;
+}
+
+bool is_this_correct_list(const std::vector<size_t>& temp_list, const size_t defaulter) {
+	size_t temp_sum{};
+	temp_sum = std::accumulate(temp_list.cbegin(), temp_list.cend(), temp_sum);
+	if (temp_sum == defaulter) {
+		return true;
+	}
+	return false;
+}
+
+//size_t sum_max_min(const std::vector<size_t>& temp_list) {
+	//std::vector<size_t>::const_iterator max{std::max(temp_list.cbegin(), temp_list.cend())};
+	//std::vector<size_t>::const_iterator min{std::min(temp_list.cbegin(), temp_list.cend())};
+	//return *max + *min;
+//}
+
+size_t sum_max_min(const std::vector<size_t>& temp_list) {
+	size_t max{temp_list.at(0)}, min{temp_list.at(0)};
+	for (std::vector<size_t>::size_type i = 0; i < temp_list.size(); ++i) {
+		if (max < temp_list.at(i)) {
+			max = temp_list.at(i);
+		}
+		if (min > temp_list.at(i)) {
+			min = temp_list.at(i);
+		}
+	}
+	return max + min;
 }
