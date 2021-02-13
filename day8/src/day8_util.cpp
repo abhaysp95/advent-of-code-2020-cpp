@@ -104,8 +104,9 @@ size_t get_accumulator_value_part2(std::map<size_t, std::string>& all_operations
 	bool if_operator_changed = false;
 	size_t count{};
 	do {
-		std::cout << "here and" << "\n";
+		std::cout << "Checking for [ " << operations_cbegin->first << ", " << operations_cbegin->second << " ]: ";
 		if_operator_changed = false;
+		is_this_the_correct_change = true;
 		operation_details = get_operation_detail(operations_cbegin->second);
 		std::map<size_t, std::string> all_new_operations{all_operations.cbegin(), all_operations.cend()};
 		std::map<size_t, std::string>::iterator new_operation_begin{all_new_operations.begin()};
@@ -120,12 +121,16 @@ size_t get_accumulator_value_part2(std::map<size_t, std::string>& all_operations
 			if_operator_changed = true;
 		}
 		if (if_operator_changed) {
-			std::cout << "here" << "\n";
 			accumulator_value = get_accumulator_value(all_new_operations, is_this_the_correct_change);
-			if (is_this_the_correct_change) {
-				std::cout << operations_cbegin->first << ", " << operations_cbegin->second << std::endl;
+			std::cout << std::boolalpha << is_this_the_correct_change << "\n";
+			if (is_this_the_correct_change) {  // why isn't this working
+				std::cout << "\nresultant operation: " << operations_cbegin->first << ", "
+					<< operations_cbegin->second << std::endl;
 				break;
 			}
+		}
+		else {
+			std::cout << "nop \n";
 		}
 		operations_cbegin++;
 		count++;
@@ -139,6 +144,7 @@ std::string change_operation(const std::string& current_operation, const std::st
 	return std::string(operation + " " + operator_operand);
 }
 
+/** overloaded function */
 size_t get_accumulator_value(const std::map<size_t, std::string>& all_operations, bool& is_this_the_correct_change) {
 	size_t accumulator_value{};
 	std::map<size_t, std::string>::const_iterator operations_cbegin{all_operations.cbegin()},
