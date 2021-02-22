@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.15)
+project(Advent_Of_Code_2020_CPP)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_subdirectory(day1)
+add_subdirectory(day2)
+add_subdirectory(day3)
+add_subdirectory(day4)
+add_subdirectory(day5)
+add_subdirectory(day6)
+add_subdirectory(day7)
+add_subdirectory(day8)
+add_subdirectory(day9)
