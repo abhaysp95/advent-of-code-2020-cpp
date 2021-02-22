@@ -2,6 +2,7 @@
 
 #include "../inc/day9_util.hpp"
 
+#include <algorithm>
 #include <numeric>
 
 size_t first_defaulter_number(std::vector<size_t> xmas_data, const size_t preamble_size) {
@@ -70,21 +71,21 @@ bool is_this_correct_list(const std::vector<size_t>& temp_list, const size_t def
 	return false;
 }
 
-//size_t sum_max_min(const std::vector<size_t>& temp_list) {
-	//std::vector<size_t>::const_iterator max{std::max(temp_list.cbegin(), temp_list.cend())};
-	//std::vector<size_t>::const_iterator min{std::min(temp_list.cbegin(), temp_list.cend())};
-	//return *max + *min;
-//}
-
 size_t sum_max_min(const std::vector<size_t>& temp_list) {
-	size_t max{temp_list.at(0)}, min{temp_list.at(0)};
-	for (std::vector<size_t>::size_type i = 0; i < temp_list.size(); ++i) {
-		if (max < temp_list.at(i)) {
-			max = temp_list.at(i);
-		}
-		if (min > temp_list.at(i)) {
-			min = temp_list.at(i);
-		}
-	}
-	return max + min;
+	std::vector<size_t>::const_iterator max = std::max_element(temp_list.cbegin(), temp_list.cend());
+	std::vector<size_t>::const_iterator min = std::min_element(temp_list.cbegin(), temp_list.cend());
+	return *max + *min;
 }
+
+//size_t sum_max_min(const std::vector<size_t>& temp_list) {
+	//size_t max{temp_list.at(0)}, min{temp_list.at(0)};
+	//for (std::vector<size_t>::size_type i = 0; i < temp_list.size(); ++i) {
+		//if (max < temp_list.at(i)) {
+			//max = temp_list.at(i);
+		//}
+		//if (min > temp_list.at(i)) {
+			//min = temp_list.at(i);
+		//}
+	//}
+	//return max + min;
+//}
