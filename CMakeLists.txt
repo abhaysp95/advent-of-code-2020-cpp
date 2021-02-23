@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(Advent_Of_Code_2020_CPP)
+project(Advent_Of_Code_2020_CPP LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
