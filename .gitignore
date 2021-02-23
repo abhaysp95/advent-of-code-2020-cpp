@@ -2,3 +2,5 @@
 build/
 build_make/
 build_ninja/
+Debug
+compile_commands.json
