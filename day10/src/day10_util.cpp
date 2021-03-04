@@ -39,10 +39,49 @@ const std::map<size_t, size_t>* const get_all_jolt_differences(const std::vector
 		get_joltage_ratings++;
 	} while ((get_joltage_ratings != input_joltage_ratings.cend())
 			&& (current_joltage_rating <= *my_device_joltage_rating + 3));
-	// increment extra 1 difference for difference-3
-	std::map<size_t, size_t>::iterator get_difference_3 = differences_count->find(3);
-	if (get_difference_3 != differences_count->cend()) {
-		get_difference_3->second++;
-	}
 	return differences_count;
+}
+
+
+/** second part is kinda solved like this
+
+  get the sorted joltage ratings
+  t -> total_arrangements
+  m -> multiplier_count
+  o -> count_one
+
+0. t - 1, m - 1, o - 1
+1. m - 1, o - 1
+4. t - 1, m - 1, o - 1
+5. m - 1, o - 1
+6. m - 2, o - 2
+7. m - 4, o - 3
+10. t - 4, m - 1, o - 1
+11. m - 1, o - 1
+12. m - 2, o - 2
+15. t - 8, m - 1
+16. m - 1, o - 1
+19. t - 8, m - 1, o - 1
+22. t - 8, m - 1, o - 1
+
+  */
+
+const unsigned long total_arrangement_of_adapters(const std::vector<size_t>& input_joltage_ratings) {
+	unsigned long total_arrangements{1};
+	size_t count_one{};
+	size_t multiplier_count{1};
+	std::vector<size_t>::const_iterator current_joltage{input_joltage_ratings.cbegin()};
+	while (current_joltage != input_joltage_ratings.cend()) {
+		if (*(current_joltage + 1) - *current_joltage == 1) {
+			multiplier_count += count_one;
+			count_one++;
+		}
+		else if (*(current_joltage + 1) - *current_joltage == 3) {
+			total_arrangements *= multiplier_count;
+			multiplier_count = 1;
+			count_one = 0;
+		}
+		current_joltage++;
+	}
+	return total_arrangements;
 }
