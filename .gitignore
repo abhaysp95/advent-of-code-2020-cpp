@@ -1,5 +1,6 @@
 .ccls-cache/
 build/
+build_debug/
 build_make/
 build_ninja/
 Debug
