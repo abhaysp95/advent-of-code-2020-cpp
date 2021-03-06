@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
 	while(input_file >> rating) {
 		your_adapters_joltage_ratings.push_back(rating);
 	}
+	input_file.close();
 	your_adapters_joltage_ratings.push_back(
 			*(std::max_element(your_adapters_joltage_ratings.cbegin(),
 					your_adapters_joltage_ratings.cend())) + 3);
