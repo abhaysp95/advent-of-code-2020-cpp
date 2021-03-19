@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#define DELTA_SIZE 8
 
 	/**
 	  deltas for seat checking
@@ -20,13 +21,11 @@
 	*/
 
 //std::array<std::array<int, 2>, 8> deltas = {  // problem(excess elements in struct initializer)
-int deltas[8][2] = {
-	{-1, -1}, {-1, 0}, {-1, 1},  // top
-	{0, -1}, {0, 1},             // mid
-	{1, -1}, {1, 0}, {1, 1}      // bottom
-};
+extern int deltas[8][2];
 
 size_t check_occupied_seats(std::vector<std::string>& sitting_layout, size_t occupied_seats_threshold = 4);
-size_t count_occupied_seats(const std::vector<std::string>::size_type row_index, const std::string::size_type col_index, const std::vector<std::string>& temp_sitting_layout);
+size_t count_occupied_seats(const std::vector<std::string>::size_type row_index, const std::string::size_type col_index,
+		const std::vector<std::string>& temp_sitting_layout);
+void print_seat_matrix(const std::vector<std::string>& sitting_layout);
 
 #endif
